@@ -91,29 +91,13 @@ public class HighwaysAndHospitals {
             // we only need to add the end node to the subgraph
             else if (rootNodes[edgeStart] != -1 && rootNodes[edgeEnd] == -1)
             {
-                // Find the subgraph that the start node is in
-                // TODO this seems really bad, we can do better
-                for (Subgraph subgraph : subgraphs)
-                {
-                    if (subgraph.rootNode == rootNodes[edgeStart])
-                    {
-                        rootNodes[edgeEnd] = rootNodes[edgeStart];
-                        break;
-                    }
-                }
+                rootNodes[edgeEnd] = rootNodes[edgeStart];
             }
             // If the end node is in a subgraph and the start node is not, then we want to add the start node
             // to the end node's subgraph
             else if (rootNodes[edgeStart] == -1 && rootNodes[edgeEnd] != -1)
             {
-                for (Subgraph subgraph : subgraphs)
-                {
-                    if (subgraph.rootNode == rootNodes[edgeEnd])
-                    {
-                        rootNodes[edgeStart] = rootNodes[edgeEnd];
-                        break;
-                    }
-                }
+                rootNodes[edgeStart] = rootNodes[edgeEnd];
             }
             // Now we know that these two nodes are both already in subgraphs.
             // We don't necessarily know if they are in the same subgraph, though, so we need to check if they're !=
