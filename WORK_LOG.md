@@ -1,9 +1,9 @@
 Name: YOUR NAME HERE
 
-| Date    |  Time  |                                     Update |
-|:--------|:------:|-------------------------------------------:|
-| April 5 | 9-10pm | I tried to write abstract, efficient code. |
-|         |        |                                            |
+| Date   |    Time     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                Update |
+|:-------|:-----------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Sep 11 | 9:15-9:45pm | I first started by thinking about the problem whether to traverse nodes or edges. I realized that the only information I need to find is the number of subgraphs, so I brainstormed an algorithmic approach to build "subgraphs" using the edges provides. This involves iterating over cities, mapping each node to the root node of its subgraph, and adding/merging subgraphs when needed. I realized half an hour later that I forgot to commit! Hope this is ok. |
+|        |             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 
 To add a new row to the table, click into a cell and then hit shift-enter.
