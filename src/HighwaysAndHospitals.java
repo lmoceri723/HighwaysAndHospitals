@@ -11,13 +11,22 @@
 public class HighwaysAndHospitals {
 
     private static int find(int[] rootNodes, int node) {
-        // Get back to the root from node
-        // Root nodes have negative values to convey the weight of the tree
+        // First find the root of the tree
+        int root = node;
+        while (rootNodes[root] > 0) {
+            root = rootNodes[root];
+        }
+
+        // Traverse over each node leading to the root and set its parent to the root
         while (rootNodes[node] > 0) {
-            node = rootNodes[node];
+            int parent = rootNodes[node];
+            rootNodes[node] = root;
+            node = parent;
         }
         return node;
     }
+
+
 
     private static int union(int[] rootNodes, int root1, int root2) {
         // If the roots are different, we merge the two subgraphs
