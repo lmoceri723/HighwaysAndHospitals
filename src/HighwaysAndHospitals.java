@@ -10,6 +10,37 @@
 
 public class HighwaysAndHospitals {
 
+    private static int find(int[] rootNodes, int node) {
+        // Get back to the root from node
+        // Root nodes have negative values to convey the weight of the tree
+        while (rootNodes[node] > 0) {
+            node = rootNodes[node];
+        }
+        return node;
+    }
+
+    private static int union(int[] rootNodes, int root1, int root2) {
+        // If the roots are different, we merge the two subgraphs
+        if (root1 != root2) {
+            // Merge the smaller subgraph into the larger one
+            if (rootNodes[root1] < rootNodes[root2]) {
+                rootNodes[root2] = root1;
+            } else if (rootNodes[root1] > rootNodes[root2]) {
+                rootNodes[root1] = root2;
+            } else {
+                rootNodes[root2] = root1;
+                // This is the only point where the tree increases in size beyond its current weight
+                // To handle this we have to add one to its weight to reflect this
+                rootNodes[root1]--;
+            }
+
+            // Return 1 to indicate that we merged
+            return 1;
+        }
+        // Return 0 to indicate that we didn't merge
+        return 0;
+    }
+
     public static long cost(int n, int hospitalCost, int highwayCost, int[][] cities) {
         // If the hospital cost is less than the highway cost, we can simply build a hospital in each city
         // In this context, highways don't actually matter, so we don't even need to look at the graph
@@ -18,38 +49,24 @@ public class HighwaysAndHospitals {
             return (long) n * hospitalCost;
         }
 
-        // We want to treat each node as its own subgraph
+        // We want to treat each node as its own subgraph initially
         int numSubgraphs = n;
 
-        // For each node, store the root node of its tree
-        int[] rootNodes = new int[n+1];
-        // Initialize each node to be its own root, so we only need to merge subgraphs
-        for (int i = 0; i < rootNodes.length; i++) {
-            rootNodes[i] = i;
-        }
+        // For each node, track its parent node and its weight
+        int[] rootNodes = new int[n + 1];
 
-        // TODO iterate over each edge in cities and build the subgraphs
+        // Iterate over each edge in cities and build the subgraphs
         for (int[] city : cities) {
             int edgeStart = city[0];
             int edgeEnd = city[1];
 
-            // Get the root nodes of the two subgraphs of edgeStart and edgeEnd
-            int startRoot = rootNodes[edgeStart];
-            int endRoot = rootNodes[edgeEnd];
+            // Get the root node attached to each edge's tree
+            int rootStart = find(rootNodes, edgeStart);
+            int rootEnd = find(rootNodes, edgeEnd);
 
-            // We only need to merge subgraphs if they do not hold the same root, otherwise they are different
-            if (startRoot != endRoot) {
-                // Merge the two subgraphs
-                int toChange = rootNodes[edgeEnd];
-                for (int i = 0; i < rootNodes.length; i++) {
-                    if (rootNodes[i] == toChange) {
-                        rootNodes[i] = rootNodes[edgeStart];
-                    }
-                }
-
-                // Reflect the merge in our total count
-                numSubgraphs--;
-            }
+            // Try to union them, if union returns 1, we merged two subgraphs and can subtract 1 from the total
+            // If union returns 0, we didn't merge anything and so subtracting 0 doesn't change anything
+            numSubgraphs -= union(rootNodes, rootStart, rootEnd);
         }
 
         // Now we have all subgraphs processed, we can calculate the cost using the number of subgraphs
